@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script type="text/javascript">
+			var resp;
+			function AjaxRequest(callback, url, ...params)
+			{
+				console.log(params.join('&'));
+				console.log("params.join('&')=" + params.join('&'));
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = callback;
+				xhttp.open("POST", url, true);
+				xhttp.send(params.join('&'));
+			}
+			
+			function testResponse()
+			{
+				if (this.readyState == 4 && this.status == 200) 
+				{
+					resp = this;
+					console.log(this);
+					console.log(this.responseText);
+				}
+			}
+		</script>
+	</head>
+	<body>
+		내가 누구냐고? 알 필요 없다.
+		<button onClick="AjaxRequest(testResponse, 'ajax.jsp', 'a=1', 'b=2')">질문은 그만!</button>
+	</body>
+</html>
