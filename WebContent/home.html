@@ -2,25 +2,29 @@
 <html lang="en" dir="ltr">
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.com/libraries/Chart.js">
+
   <meta charset="utf-8">
-  <title>탁피언은 탁구경기 통계정보를 제공하는 사이트 입니다</title>
+  <title>탁피언 랭킹</title>
 </head>
 <body>
   <div class="container">
     <!-- 점보 트론 (화면 상단) -->
-    <div class="jumbotron">
-      <h1>탁피언</h1>
-      <p> 탁피언은 탁구 경기 정보를 기록하, 경기 정보와 관련된 통계자료를 제공하는 사이트 입니다.</p>
+    <div class="jumbotron" style="height: 200px">
+      <img src="resources/racket4.png" style="width:80px;" class="rounded float-left m-2" alt="...">
+      <img src="resources/trophy2.png" style="width:60px;" class="rounded float-right m-2" alt="...">
+      <h1 class="text-center">탁피언</h1>
+      <p> 탁피언은 탁구 경기 정보를 기록하고, 경기 정보와 관련된 통계자료를 제공하는 사이트 입니다.</p>
     </div>
 
     <!-- 랭킹 순위 테이블 -->
-    <div  class="container">
+    <div  class="container border p-4">
       <h2>이번달 탁피언은?</h2>
       <div class="form-group">
         <label for="usr">아이디 검색:</label>
         <input type="text" class="form-control" id="usr">
       </div>
-      <table id="table_ranking" class="table table-bordered bg-light">
+      <table id="table_history" class="table table-bordered bg-light">
         <thead>
           <tr>
             <th>순위</th>
@@ -43,7 +47,7 @@
             <td>한국항공대학교</td>
             <td>2450</td>
           </tr>
-          <!-- 데이터 베이스에서 가져온 뒤에 tr을 동적으로 추가할 예정 -->
+          <!-- 데이터 베이스에서 가져온 뒤에 tr을 동적으로 추가 -->
         </tbody>
       </table>
     </div>
