@@ -5,14 +5,14 @@
 <html>
 	<body>
 	<%
-	Connection connection = null;
-    Statement st = null;
+		Connection connection = null;
+	    Statement st = null;
     
 	   String msg = "none";
        String sql;
        
-       Class.forName("com.mysql.jdbc.Driver");
-       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tackpion" , "root", "admin");
+       Class.forName("com.mysql.cj.jdbc.Driver");
+       connection = DriverManager.getConnection("jdbc:mysql://192.168.174.129:3306/tackpion" , "root", "admin");
        st = connection.createStatement();
 
        sql = "SELECT 'hello jspbookdb!' AS msg";
