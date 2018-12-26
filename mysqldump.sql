@@ -19,7 +19,7 @@
 -- Current Database: `tackpion`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `tackpion` /*!40100 DEFAULT CHARACTER SET utf16 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `tackpion` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 
 USE `tackpion`;
 
@@ -31,13 +31,13 @@ DROP TABLE IF EXISTS `ADMIN`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `ADMIN` (
-  `id` varchar(40) NOT NULL,
-  `password` varchar(64) DEFAULT NULL,
+  `id` varchar(40) CHARACTER SET utf16 NOT NULL,
+  `password` varchar(64) CHARACTER SET utf16 DEFAULT NULL,
   `classid` int(11) NOT NULL AUTO_INCREMENT,
   `privileges` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`classid`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf16;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +76,7 @@ CREATE TABLE `GAME` (
   KEY `is_playing2_idx` (`player2`),
   CONSTRAINT `is_playing1` FOREIGN KEY (`player1`) REFERENCES `PLAYER` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `is_playing2` FOREIGN KEY (`player2`) REFERENCES `PLAYER` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf16;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,12 +98,12 @@ DROP TABLE IF EXISTS `PLAYER`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `PLAYER` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) DEFAULT NULL,
+  `name` varchar(40) CHARACTER SET utf16 DEFAULT NULL,
   `teamid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `belong_to_idx` (`teamid`),
   CONSTRAINT `belong_to` FOREIGN KEY (`teamid`) REFERENCES `TEAM` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf16;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +135,7 @@ CREATE TABLE `SCORE_LOG` (
   KEY `is_recording` (`recorder_admin`),
   CONSTRAINT `is_recording` FOREIGN KEY (`recorder_admin`) REFERENCES `ADMIN` (`classid`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `is_scorelog_of` FOREIGN KEY (`game_id`) REFERENCES `GAME` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf16;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,9 +156,9 @@ DROP TABLE IF EXISTS `TEAM`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `TEAM` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) DEFAULT NULL,
+  `name` varchar(40) CHARACTER SET utf16 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf16;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,4 +180,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 21:56:50
+-- Dump completed on 2018-12-26 23:33:38
