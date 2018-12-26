@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <title>경기 기록</title>
+</head>
+<script type="text/javascript">
+
+function AjaxRequest(callback, url, callbackParams, urlParams)
+{
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function()
+  {
+    callback.apply(this, callbackParams);
+  };
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send(urlParams.join('&'));
+}
+
+</script>
+<body = class="container">
+  <div class="row">
+    <span class="text-center col-12 mb-4">
+      hamoney9409 님 환영합니다!
+    </span>
+  </div>
+  <span class="underway_game_1">
+    <!-- 스코어 -->
+    <div class="row">
+      <h3 class="player1_score text-center col-6">하상범: 0</h3>
+      <h3 class="player2_score text-center col-6">김영주: 0</h3>
+    </div>
+    <!-- 버튼 -->
+    <div class="row ">
+      <div class="col-1"></div>
+      <button type="button button3" class="btn btn-primary col-4" onclick="alert('Hello world!')">+</button>
+      <div class="col-2"></div>
+      <button type="button button3" class="btn btn-primary col-4" onclick="alert('Hello world!')">+</button>
+      <div class="col-1"></div>
+
+    </div>
+    <!-- 세트 스코어 -->
+    <div class="row m-4">
+      <span class="col-12 display-3 text-center">SET</span>
+    </div>
+    <div class="row m-4">
+      <span class="player1_setscore col-6 display-3 text-right">0</span>
+      <span class="player2_setscore col-6 display-3 text-left">0</span>
+    </div>
+    <div class="row">
+      <div class="col-8"></div>
+      <button type="button col-4" onclick="alert('Hello world!')">새 경기 개설</button>
+    </div>
+  </span>
+
+</body>
+</html>
