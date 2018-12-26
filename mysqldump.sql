@@ -62,7 +62,7 @@ CREATE TABLE `GAME` (
   `player1` int(11) NOT NULL,
   `player2` int(11) NOT NULL,
   `start_date` datetime NOT NULL,
-  `end_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL COMMENT 'null if game is still playing',
   `score1_p1` int(2) DEFAULT NULL,
   `score1_p2` int(2) DEFAULT NULL,
   `score2_p1` int(2) DEFAULT NULL,
@@ -71,6 +71,8 @@ CREATE TABLE `GAME` (
   `score3_p2` int(2) DEFAULT NULL,
   `score4_p1` int(2) DEFAULT NULL,
   `score4_p2` int(2) DEFAULT NULL,
+  `rank_increment_p1` int(11) DEFAULT NULL,
+  `rank_increment_p2` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `is_playing_idx` (`player1`,`player2`),
   KEY `is_playing2_idx` (`player2`),
@@ -85,7 +87,7 @@ CREATE TABLE `GAME` (
 
 LOCK TABLES `GAME` WRITE;
 /*!40000 ALTER TABLE `GAME` DISABLE KEYS */;
-INSERT INTO `GAME` VALUES (1,1,2,'2018-12-25 13:11:22',NULL,3,8,4,7,5,6,6,5);
+INSERT INTO `GAME` VALUES (1,1,2,'2018-12-25 13:11:22',NULL,3,8,4,7,5,6,6,5,NULL,NULL);
 /*!40000 ALTER TABLE `GAME` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,6 +102,7 @@ CREATE TABLE `PLAYER` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) CHARACTER SET utf16 DEFAULT NULL,
   `teamid` int(11) DEFAULT NULL,
+  `rank` int(11) NOT NULL DEFAULT '1000',
   PRIMARY KEY (`id`),
   KEY `belong_to_idx` (`teamid`),
   CONSTRAINT `belong_to` FOREIGN KEY (`teamid`) REFERENCES `TEAM` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -112,7 +115,7 @@ CREATE TABLE `PLAYER` (
 
 LOCK TABLES `PLAYER` WRITE;
 /*!40000 ALTER TABLE `PLAYER` DISABLE KEYS */;
-INSERT INTO `PLAYER` VALUES (1,'하상범',1),(2,'김영주',1);
+INSERT INTO `PLAYER` VALUES (1,'하상범',1,1000),(2,'김영주',1,1000);
 /*!40000 ALTER TABLE `PLAYER` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 23:33:38
+-- Dump completed on 2018-12-27  1:14:35
