@@ -7,13 +7,36 @@
 			var resp;
 			function AjaxRequest(callback, url, ...params)
 			{
-				console.log(params.join('&'));
-				console.log("params.join('&')=" + params.join('&'));
 				var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = callback;
 				xhttp.open("POST", url, true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				xhttp.send(params.join('&'));
 			}
+			
+			function AjaxRequest2(str, url, ...params)
+			{
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() { 
+					console.log(this); console.log(str); testResponse2(str); 
+				};
+				xhttp.open("POST", url, true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhttp.send(params.join('&'));
+			}
+			
+			function AjaxRequest3(callback, url, callbackParams, urlParams)
+			{
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() { 
+					callback.apply(this, callbackParams);
+				};
+				xhttp.open("POST", url, true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhttp.send(urlParams.join('&'));
+			}
+			
+			
 			
 			function testResponse()
 			{
@@ -24,10 +47,38 @@
 					console.log(this.responseText);
 				}
 			}
+
+			function testResponse2(str)
+			{
+				console.log(this);
+				if (this.readyState == 4 && this.status == 200) 
+				{
+					resp = this;
+					console.log(str);
+					console.log(this.responseText);
+				}
+			}
+			
+			function testRequest(str)
+			{
+				AjaxRequest(
+					function() { testResponse2(str); }, 'ajax.jsp', 'a=1', 'b=2'
+				);
+			}
 		</script>
 	</head>
 	<body>
 		내가 누구냐고? 알 필요 없다.
+		<br/>
 		<button onClick="AjaxRequest(testResponse, 'ajax.jsp', 'a=1', 'b=2')">질문은 그만!</button>
+		<br/>
+		<button onClick="AjaxRequest( function() { testResponse2('아하'); }, 'ajax.jsp', 'a=3', 'b=4')">질문은 그만!</button>
+		<br/>
+		<button onClick="testRequest('아하')">질문은 그만!</button>
+		<br/>
+		<button onClick="AjaxRequest2('아하', 'ajax.jsp', 'a=1', 'b=2')">질문은 그만!</button>
+		<br/>
+		<button onClick="AjaxRequest3(testResponse2, 'ajax.jsp', ['아하'], ['a=1', 'b=2'])">질문은 그만!</button>
+		<br/>
 	</body>
 </html>

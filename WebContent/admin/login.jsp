@@ -1,23 +1,69 @@
 <%@ page language="java" contentType="text/html;charset=utf-8" %>
 <%@ page import="thinkonweb.util.ConnectionContext" %>
+<%@ page import="java.util.*" %>
 <%@ page import="java.sql.*" %>
 
 <% 
 	String id = (String)session.getAttribute("loginId");
 	boolean isLogin = false;
+	
+	class Game
+	{
+		public int gameId;
+		public int[][] playerScore = new int[2][4];
+		public String[] playerName = new String[2];
+		
+		
+		public int getPlayerSetScore(int playerNum)
+		{
+			int setScore = 0;
+			for(int i = 0; i < playerScore[playerNum].length; i++)
+			{
+				int otherPlayerScore = 0;
+				for(int j=0; j < playerScore.length; j++)
+				{
+					otherPlayerScore += playerScore[j][i];
+				}
+				
+				otherPlayerScore -= playerScore[playerNum][i];
+				
+				if (otherPlayerScore < playerScore[playerNum][i])
+				{
+					setScore++;
+				}
+			}
+			
+			return setScore;
+		}
+		
+	}
 %>
 
 <!DOCTYPE html>
 	<html>
 		<head>
-		 <meta charset="utf-8">
-		<title>Insert title here</title>
+			<meta charset="utf-8">
+			<title>Insert title here</title>
 		</head>
+		<script type="text/javascript">
+
+			function AjaxRequest(callback, url, callbackParams, urlParams)
+			{
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() 
+				{ 
+					callback.apply(this, callbackParams);
+				};
+				xhttp.open("POST", url, true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhttp.send(urlParams.join('&'));
+			}
+			
+		</script>
 	<body>
 <% 
 	do
 	{
-		
 		if (id != null)
 		{
 			// 로그인 세션 남아있음
@@ -38,7 +84,8 @@
 		<form method="post">
 			ID : <input type="text" name="id"><br/>
 			Password : <input type="password" name="password"><br/>
-		<input type="submit" value="전송">
+			<input type="submit" value="전송">
+		</form>
 		
 <%
 			break;
@@ -82,15 +129,68 @@
 		
 	} while(false);
 
-	// 로그인 페이지
+	// 여기서부터 관리자 페이지
 	if (isLogin)
 	{
 %>
-		비밀번호를 제대로 적지 못할까!
+		<%=id%> 님 환영합니다!<br/>
 <% 
-	}
+		Vector<Game> gamelist = new Vector<Game>(2);
 	
-	// 여기서부터 관리자 페이지
+		{
+			Connection conn = ConnectionContext.getConnection();
+			CallableStatement stmt = conn.prepareCall("{call SP_GET_UNDERWAY_GAMES_INFO()}");
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) 
+			{
+				Game element = new Game();
+				
+				element.gameId = rs.getInt("id");
+				element.playerName[0] = rs.getString("player1_name");
+				element.playerName[1] = rs.getString("player2_name");
+				element.playerScore[0][0] = rs.getInt("score1_p1");
+				element.playerScore[0][1] = rs.getInt("score2_p1");
+				element.playerScore[0][2] = rs.getInt("score3_p1");
+				element.playerScore[0][3] = rs.getInt("score4_p1");
+				element.playerScore[1][0] = rs.getInt("score1_p2");
+				element.playerScore[1][1] = rs.getInt("score2_p2");
+				element.playerScore[1][2] = rs.getInt("score3_p2");
+				element.playerScore[1][3] = rs.getInt("score4_p2");
+				
+				gamelist.add(element);
+			}
+		}
+	
+		for(Game game : gamelist)
+		{
+			int[] setScore = new int[2];
+			for(int i=0; i<setScore.length; i++)
+			{
+				setScore[i] = game.getPlayerSetScore(i);
+			}
+			
+			int set = setScore[0] + setScore[1];
+%>
+		<span class="underway_game_<%= game.gameId %>">
+		<%= game.playerName[0] %> : <span class="player1_score"><%= game.playerScore[0][set] %></span> 점 
+		<button type="button" onclick="alert('Hello world!')">+</button>
+		<br/>
+		<span class="player1_setscore"><%= setScore[0] %></span> SET 
+		<span class="player2_setscore"><%= setScore[1] %></span>
+		<br/>
+		<%= game.playerName[1] %> :  <span class="player2_score"><%= game.playerScore[1][set] %></span> 점 
+		<button type="button" onclick="alert('Hello world!')">+</button>
+		<br/>
+		
+		</span>
+		<br/>
+<% 
+		}
+%>
+	<button type="button" onclick="alert('Hello world!')">새 경기 개설</button>
+<%
+	}
 %>
 	</body>
 </html>
