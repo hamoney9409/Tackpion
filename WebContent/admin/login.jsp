@@ -23,11 +23,13 @@
 				{
 					otherPlayerScore += playerScore[j][i];
 				}
-
-				if (otherPlayerScore < 11)
-					continue;
 				
 				otherPlayerScore -= playerScore[playerNum][i];
+				
+				if (otherPlayerScore < 11 && playerScore[playerNum][i] < 11)
+				{
+					continue;
+				}
 				
 				if (otherPlayerScore < playerScore[playerNum][i])
 				{
