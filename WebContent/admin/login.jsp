@@ -13,7 +13,6 @@
 		public int[][] playerScore = new int[2][4];
 		public String[] playerName = new String[2];
 		
-		
 		public int getPlayerSetScore(int playerNum)
 		{
 			int setScore = 0;
@@ -24,6 +23,9 @@
 				{
 					otherPlayerScore += playerScore[j][i];
 				}
+
+				if (otherPlayerScore < 11)
+					continue;
 				
 				otherPlayerScore -= playerScore[playerNum][i];
 				
@@ -35,7 +37,6 @@
 			
 			return setScore;
 		}
-		
 	}
 %>
 
@@ -43,6 +44,7 @@
 	<html>
 		<head>
 			<meta charset="utf-8">
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 			<title>Insert title here</title>
 		</head>
 		<script type="text/javascript">
@@ -59,8 +61,54 @@
 				xhttp.send(urlParams.join('&'));
 			}
 			
+			function ajaxAddscore()
+			{
+				if (this.readyState == 4 && this.status == 200) 
+				{
+					console.log("야호");
+					console.log(this.responseText);
+					var result = this.responseText.replace(/\n/ig, '').split(',');
+					console.log(result);
+					//var selector = ('[class=underway_game_' + result[0] + ']');
+					//console.log(selector);
+					
+					var underWayGameElement = window.document.querySelectorAll('.underway_game');
+					
+					for(var i=0; i<underWayGameElement.length; i++)
+					{
+						var value = underWayGameElement[i].getAttribute("value");
+						
+						console.log(parseInt(value) == parseInt(result[0]));
+						if (parseInt(value) == parseInt(result[0]))
+						{
+							underWayGameElement[i]
+								.querySelector('.player1_setscore')
+								.innerText = result[1];
+							underWayGameElement[i]
+								.querySelector('.player2_setscore')
+								.innerText = result[2];
+							underWayGameElement[i]
+								.querySelector('.player1_score')
+								.innerText = result[3];
+							underWayGameElement[i]
+								.querySelector('.player2_score')
+								.innerText = result[4];
+							break;
+						}
+					}
+				}
+				else
+				{
+					console.log(this.readyState);
+					console.log(this.status);
+					console.log(this.responseText);
+				}
+				
+			}
+			
+			
 		</script>
-	<body>
+	<body class="container">
 <% 
 	do
 	{
@@ -133,9 +181,13 @@
 	if (isLogin)
 	{
 %>
-		<%=id%> 님 환영합니다!<br/>
+		<div class="row">
+    		<span class="text-center col-12 mb-4">
+				<%=id%> 님 환영합니다!<br/>
+			</span>
+		</div>
 <% 
-		Vector<Game> gamelist = new Vector<Game>(2);
+		Vector<Game> gamelist = new Vector<Game>();
 	
 		{
 			Connection conn = ConnectionContext.getConnection();
@@ -172,23 +224,51 @@
 			
 			int set = setScore[0] + setScore[1];
 %>
-		<span class="underway_game_<%= game.gameId %>">
-		<%= game.playerName[0] %> : <span class="player1_score"><%= game.playerScore[0][set] %></span> 점 
-		<button type="button" onclick="alert('Hello world!')">+</button>
-		<br/>
-		<span class="player1_setscore"><%= setScore[0] %></span> SET 
-		<span class="player2_setscore"><%= setScore[1] %></span>
-		<br/>
-		<%= game.playerName[1] %> :  <span class="player2_score"><%= game.playerScore[1][set] %></span> 점 
-		<button type="button" onclick="alert('Hello world!')">+</button>
-		<br/>
-		
+		<span class="underway_game" value="<%= game.gameId %>">
+		<!-- 스코어 -->
+			<div class="row">
+				<h5 class="text-center col-6"><%= game.playerName[0] %></h5>
+				<h5 class="text-center col-6"><%= game.playerName[1] %></h5>
+			</div>
+			<div class="row">
+				<h3 class="player1_score text-center col-6"><%= game.playerScore[0][set] %></h3>
+				<h3 class="player2_score text-center col-6"><%= game.playerScore[1][set] %></h3>
+			</div>
+			<!-- 버튼 -->
+			<div class="row ">
+				<div class="col-1"></div>
+				<button 
+					type="button button3" 
+					class="btn btn-primary col-4" 
+					onclick="AjaxRequest(ajaxAddscore, 'ajax_addscore.jsp', [], ['id=<%=game.gameId%>', 'player=1'])">
+				+
+				</button>
+				<div class="col-2"></div>
+				<button 
+					type="button button3" 
+					class="btn btn-primary col-4" 
+					onclick="AjaxRequest(ajaxAddscore, 'ajax_addscore.jsp', [], ['id=<%=game.gameId%>', 'player=2'])">
+				+
+				</button>
+				<div class="col-1"></div>
+			</div>
+			<!-- 세트 스코어 -->
+			<div class="row m-4">
+				<span class="col-12 display-3 text-center">SET</span>
+			</div>
+			<div class="row m-4">
+				<span class="player1_setscore col-6 display-3 text-right"><%= setScore[0] %></span>
+				<span class="player2_setscore col-6 display-3 text-left"><%= setScore[1] %></span>
+			</div>
 		</span>
 		<br/>
 <% 
 		}
 %>
-	<button type="button" onclick="alert('Hello world!')">새 경기 개설</button>
+    <div class="row">
+      <div class="col-8"></div>
+      <button type="button col-4" onclick="alert('Hello world!')">새 경기 개설</button>
+    </div>
 <%
 	}
 %>
