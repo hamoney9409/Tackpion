@@ -10,7 +10,7 @@
 	class Game
 	{
 		public int gameId;
-		public int[][] playerScore = new int[2][4];
+		public int[][] playerScore = new int[2][5];
 		public String[] playerName = new String[2];
 		
 		public int getPlayerSetScore(int playerNum)
@@ -207,10 +207,12 @@
 				element.playerScore[0][1] = rs.getInt("score2_p1");
 				element.playerScore[0][2] = rs.getInt("score3_p1");
 				element.playerScore[0][3] = rs.getInt("score4_p1");
+				element.playerScore[0][4] = rs.getInt("score5_p1");
 				element.playerScore[1][0] = rs.getInt("score1_p2");
 				element.playerScore[1][1] = rs.getInt("score2_p2");
 				element.playerScore[1][2] = rs.getInt("score3_p2");
 				element.playerScore[1][3] = rs.getInt("score4_p2");
+				element.playerScore[1][4] = rs.getInt("score5_p2");
 				
 				gamelist.add(element);
 			}
@@ -225,6 +227,7 @@
 			}
 			
 			int set = setScore[0] + setScore[1];
+			
 %>
 		<span class="underway_game" value="<%= game.gameId %>">
 		<!-- 스코어 -->

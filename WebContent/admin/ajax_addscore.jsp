@@ -73,15 +73,13 @@
 	}
 
 	int[] setScore = new int[2];
+	
 	for(int i=0; i<setScore.length; i++)
 	{
 		setScore[i] = game.getPlayerSetScore(i);
 	}
 	
 	int set = setScore[0] + setScore[1];
-	
-	if (4 <= set)
-		return;
 	
 	switch(player)
 	{
@@ -93,16 +91,37 @@
 		break;
 	}
 	
+	boolean gameSet = false;
+	{
+		int maxSetScore = 0;
+		int maxScore = 0;
+		for(int i=0; i<setScore.length; i++)
+		{
+			int score = game.getPlayerSetScore(i);
+			if (maxSetScore < score)
+			{
+				maxSetScore = score;
+			}
+		}
+		
+		if (3 <= maxSetScore)
+		{
+			gameSet = true;
+		}
+	}
+	
+	
 	int sum = game.playerScore[0][set] + game.playerScore[1][set];
 	{
 		Connection conn = ConnectionContext.getConnection();
-		CallableStatement stmt = conn.prepareCall("{call SP_SET_SCORE(?,?,?,?,?,?)}");
+		CallableStatement stmt = conn.prepareCall("{call SP_SET_SCORE(?,?,?,?,?,?,?)}");
 		stmt.setString(1, id);
 		stmt.setInt(2, gameId);
 		stmt.setInt(3, set+1);
 		stmt.setInt(4, game.playerScore[0][set] + game.playerScore[1][set]);
 		stmt.setInt(5, game.playerScore[0][set]);
 		stmt.setInt(6, game.playerScore[1][set]);
+		stmt.setBoolean(7, gameSet);
 		stmt.execute();	
 	}
 	
